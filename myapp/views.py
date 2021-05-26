@@ -10,20 +10,20 @@ from rest_framework.response import Response
 
 from .forms import CreateUserForm, TeacherForm, StudentForm, LessonForm, BookForm, SectionsForm, SubjectForm
 
-import pyodbc
-server_name = 'localhost'
-db_name = 'school'
-username = 'SA'
-password = 'Postgres123'
-conn = pyodbc.connect(
-                      'Driver={ODBC Driver 17 for SQL Server};'
-                      f'Server={server_name};'
-                      f'Database={db_name};'
-                      f'UID={username};'
-                      f'PWD={password};'
-                      'Mars_Connection=Yes;'
-                     )
-cursor = conn.cursor()
+# import pyodbc
+# server_name = 'localhost'
+# db_name = 'NewDataBase'
+# username = 'SA'
+# password = 'Postgres123'
+# conn = pyodbc.connect(
+#                       'Driver={ODBC Driver 17 for SQL Server};'
+#                       f'Server={server_name};'
+#                       f'Database={db_name};'
+#                       f'UID={username};'
+#                       f'PWD={password};'
+#                       'Mars_Connection=Yes;'
+#                      )
+# cursor = conn.cursor()
 
 def registerPage(request):
     form = CreateUserForm()
@@ -34,9 +34,9 @@ def registerPage(request):
             form.save()
             name = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
-
-            cursor.execute("INSERT INTO implicant(name) VALUES (?)", name)
-            conn.commit()
+            #
+            # cursor.execute("INSERT INTO implicant(name) VALUES (?)", name)
+            # conn.commit()
 
             messages.success(request, 'Регистрация прошла успешна')
             return redirect('login')
@@ -106,6 +106,9 @@ def NotQualStudentsView(request):
     context = {'implicants':result}
     return render(request, 'admin/students.html', context)
 
+
+"""Здесь скорее всего про lessons?  КОРОЧ ОН ТУПИЛ ПОТОМУЧТО МЫ ИХ НЕ СОЗДАЛИ,
+ МОЖНО ВПРИНЦИПЕ РЕШИТЬ ВСЕ ПРОБЛЕМЫ ЗАДАВ ИХ СТАТИЧНО В НАЧАЛЕ"""
 def lessonsView(request):
     teachers = cursor.execute('exec SelectLessons')
     columns = [column[0] for column in teachers.description]
@@ -116,13 +119,31 @@ def lessonsView(request):
     context = {'lessons':result}
     return render(request, 'admin/lessons.html',context)
 
+"""КОРОЧ ЗДЕСЬ ЧЕ ТА В в атрибутах какой то SUBJECT стоит, может поменять на КРУЖОК
+Если мы как то привязываемся к ним
+ТАКЖЕ В lessons and SECTIONS делаем обычный SELECT и все процедура только для создания
+Для САНЖИКА вместо надо проитись по созданным переменным"""
 def sectionsView(request):
+    """SECTIONS = SELECT * from Sections
+    и также как и lessons"""
     return render(request, 'admin/sections.html')
 
-def booksView(request):
-    return render(request, 'admin/books.html')
 
+"""ОЧЕНЬ МНОГОЕ НАДО ПОМЕНЯТЬ
+Я сам вызыву жай select all
+ДЛЯ списка должников вызывается процедура TACKAWAY
+просто отдает спискок должников надо бы заполнить тоже людьми для показа с годом больше 1го"""
+def booksView(request):
+    """books = SELECT * FROM BOOKS
+    context = {'books':books}"""
+
+    return render(request, 'admin/books.html', context=context)
+
+
+"""ПРОЦЕДУРА ПРИНИМАЕТ SUBJECT NAME и просто INSERT"""
 def subjectView(request):
+    """SELECT * FROM SUBJECTS отдает в контексте"""
+
     return render(request, 'admin/subject.html')
 
 #
@@ -148,16 +169,12 @@ def test_sql(request):
     return render(request, 'myapp/sql.html')
 
 
-def SelectAllStudents(request):
-    return render()
 
-def DeleteStundent(request, pk):
-    pass
-
-
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-
+#----------------------------------------------------------------------------------------------
+"""ЗДЕСЬ НАЧИНАЮТСЯ ВСЕ ФОРМЫ КОТОРЫЕ ПОСЛЕ ПРОСТО ПЕРЕНОСИМ В view и кусок его html добавляем в MAIN
+ПРОСТО БЕРЕШЬ СОЗДАЕШЬ ПЕРЕМЕННЫЕ с полученных ДАННЫХ и с ними делаешь ЗАПРОС и все
+ТУТ ПО СУТИ ОДНИ inserts поэтому процедура примет данные и сама INSERT в первом примере уже есть готовый шаблон
+Если INSERT то его"""
 
 def get_name(request):
     # if this is a POST request we need to process the form data
@@ -305,6 +322,11 @@ def take_info(request):
         print('post')
         data = request.data()
         return Response(data)
+
+
+def student_profile(request):
+    """ОТДАТЬ ИНФУ ПРО СТУДЕНТА ЧИСТО СЕЛЕКТЫ"""
+    pass
 
 
 

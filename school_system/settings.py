@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'school_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'school',
+        'NAME': 'NewDataBase',
         'USER': 'SA',
         'PASSWORD': 'Postgres123',
         'HOST': 'localhost',
