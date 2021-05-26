@@ -161,7 +161,7 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'sectionsView' %}"" class="nav-link link-dark">
+                <a href="{% url 'sectionsView' %}" class="nav-link link-dark">
                     <svg class="bi me-2" width="16" height="16">
                         <use xlink:href="#grid"></use>
                     </svg>
@@ -207,7 +207,9 @@
         <div class="container my-5 ">
             <div class="col-sm-12 mb-5">
                 <h4 class="pb-3">Add Teacher</h4>
-                <form action="" name="teachers">
+                <form action="" method="POST">
+                    {% csrf_token %}
+
                     <div class="row">
 
                         <div class="col-sm-2">
@@ -232,7 +234,7 @@
                         </div>
                         <div class="col-sm-2 pl-4">
                             <br>
-                            <button class="btn btn-success">Add</button>
+                            <button class="btn btn-success" type="button" onclick="addTeacher()">Add</button>
                         </div>
                     </div>
 
@@ -258,17 +260,17 @@
                         <tbody>
                         <tr>
                             {% for teacher in teachers %}
-                            <th scope="row">teacher.id</th>
-                            <td>teacher.surname</td>
-                            <td>teacher.name</td>
-                            <td>teacher.111111111111111111111111111111111111111111111111</td>
-                            <td>teacher.salary</td>
-                            <td>teacher.enrollment_date</td>
+                            <th scope="row">{{teacher.id}}</th>
+                            <td>{{teacher.name}}</td>
+                            <td>{{teacher.surname}}</td>
+                            <td>{{teacher.subject}}</td>
+                            <td>{{teacher.salary}}</td>
+                            <td>{{teacher.enrollment_date}}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm">x</button>
                             </td>
-                    </tr>
-                            {% endfor %}
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                     <h4 class="mt-5">Students</h4>
@@ -287,17 +289,17 @@
                         <tbody>
 
                         <tr>
-                            { for student in students}
-                            <th scope="row">1</th>
-                            <td>student.surname</td>
-                            <td>student.name</td>
-                            <td>student.score</td>
-                            <td>student.grade</td>
+                            {% for student in students %}
+                            <th scope="row">{{student.id}}</th>
+                            <td>{{student.surname}}</td>
+                            <td>{{student.name}}</td>
+                            <td>{{student.score}}</td>
+                            <td>{{student.grade}}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm">x</button>
                             </td>
                         </tr>
-
+                        {% endfor %}
 
                         </tbody>
                     </table>
@@ -306,6 +308,39 @@
         </div>
     </div>
 </main>
+
+<script>
+
+    function addTeacher() {
+        let name = document.getElementById("name")
+        let surname = document.getElementById("surname")
+        let subject = document.getElementById("subject")
+        let salary = document.getElementById("salary")
+
+        let json = {
+            'name': name,
+            'surname': surname,
+            'subject': subject,
+            'salary': salary
+        }
+
+        fetch('http://example.com/movies.json', {
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                method: "post",
+                body: encodeURIComponent(JSON.stringify(json.json))
+            }
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    }
+</script>
 
 
 <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js"

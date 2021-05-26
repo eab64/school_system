@@ -1,0 +1,13 @@
+<form action="" method="POST">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="Submit" name="submit" value="Submit"/>
+</form>
+
+{% if submitbutton == "Submit" %}
+<h1> Your first name is {{ firstname }}</h1>
+<h1> Your last name is {{ lastname }}</h1>
+<h1> Your email is {{ emailvalue }} </h1>
+{% endif %}
+
+</body>

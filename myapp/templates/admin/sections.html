@@ -168,7 +168,7 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'booksView' %}"  class="nav-link link-dark">
+                <a href="{% url 'booksView' %}" class="nav-link link-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-book" viewBox="0 0 16 16">
                         <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
@@ -211,31 +211,29 @@
 
                         <div class="col-sm-2">
                             <label>Class
-                                <input type="text" class="form-control" name="name" placeholder="name">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="name">
                             </label>
                         </div>
-                        <div class="col-sm-1">
+                         <div class="col-sm-3">
                             <label>Subject
-                                <select id="inputState" class="form-control">
-                                    <option selected>Math</option>
-                                    <option>Physics</option>
-                                </select>
+                                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject">
                             </label>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <label>Date
-                                <input type="datetime-local" class="form-control" name="subject" placeholder="score" max="100">
+                                <input type="datetime-local" class="form-control" name="date" id="date" placeholder="score"
+                                       max="100">
                             </label>
                         </div>
                         <div class="col-sm-2">
                             <label>Room
-                                <input type="number" class="form-control" name="subject" placeholder="number">
+                                <input type="number" class="form-control" name="room" id="room" placeholder="number">
                             </label>
                         </div>
 
                         <div class="col-sm-2 pl-4">
                             <br>
-                            <button class="btn btn-success">Submit</button>
+                            <button class="btn btn-success" type="button" onclick="addSection()">Submit</button>
                         </div>
                     </div>
 
@@ -300,7 +298,38 @@
     </div>
 </main>
 
+<script>
 
+    function addSection() {
+        let name = document.getElementById("name")
+        let subject = document.getElementById("subject")
+        let date = document.getElementById("date")
+        let room = document.getElementById("room")
+
+        let json = {
+            'name': name,
+            'subject': subject,
+            'date': date,
+            'room': room
+        }
+
+        fetch('http://example.com/movies.json', {
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                method: "post",
+                body: encodeURIComponent(JSON.stringify(json.json))
+            }
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    }
+</script>
 <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>

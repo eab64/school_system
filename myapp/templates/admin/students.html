@@ -226,7 +226,7 @@
 
                         <div class="col-sm-2 pl-4">
                             <br>
-                            <button class="btn btn-success">Submit</button>
+                            <button class="btn btn-success" type="button" onclick="addStudent()">Submit</button>
                         </div>
                     </div>
 
@@ -246,31 +246,13 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {% for implicant in implicants %}
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Фомичёв</td>
-                            <td>Филипп</td>
+                            <th scope="row">{{implicant.id}}1</th>
+                            <td>{{implicant.surname}}</td>
+                            <td>{{implicant.name}}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Меркушев</td>
-                            <td>Цицерон</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Кузнецов</td>
-                            <td>Харитон</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td>Козлова</td>
-                            <td>Гертруда</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">5</th>
-                            <td>Афанасьев</td>
-                            <td>Эрик</td>
-                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -279,7 +261,38 @@
     </div>
 </main>
 
+<script>
 
+    function addStudent() {
+        let name = document.getElementById("name")
+        let surname = document.getElementById("surname")
+        let score = document.getElementById("score")
+
+        let json = {
+            'name': name,
+            'surname': surname,
+            'score': score,
+        }
+
+        fetch('http://127.0.0.1:8000/take_info/', {
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                method: "post",
+                body: {
+                    body: encodeURIComponent(JSON.stringify(json.json))
+                }
+            }
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    }
+</script>
 <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>

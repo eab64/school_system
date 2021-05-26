@@ -142,7 +142,7 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'studentsView' %}"  class="nav-link link-dark">
+                <a href="{% url 'studentsView' %}" class="nav-link link-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-person-fill" viewBox="0 0 16 16">
                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
@@ -216,7 +216,7 @@
                         </div>
                         <div class="col-sm-2 pl-4">
                             <br>
-                            <button class="btn btn-success">Add</button>
+                            <button class="btn btn-success" type="button" onclick="addBook()">Add</button>
                         </div>
                     </div>
 
@@ -362,6 +362,40 @@
     </div>
 </main>
 
+
+<script>
+
+    function addBook() {
+        let name = document.getElementById("name")
+        let surname = document.getElementById("surname")
+        let subject = document.getElementById("subject")
+        let salary = document.getElementById("salary")
+
+        let json = {
+            'name': name,
+            'surname': surname,
+            'subject': subject,
+            'salary': salary
+        }
+
+        fetch('http://example.com/movies.json', {
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                method: "post",
+                body: encodeURIComponent(JSON.stringify(json.json))
+            }
+        )
+            .then(function (response) {
+                return response.json();
+            })
+
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    }
+</script>
 
 <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"

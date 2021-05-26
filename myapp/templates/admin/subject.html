@@ -213,12 +213,12 @@
 
                         <div class="col-sm-2">
                             <label>Name
-                                <input type="text" class="form-control" name="name" placeholder="book">
+                                <input type="text" class="form-control" id="book" name="name" placeholder="name">
                             </label>
                         </div>
                         <div class="col-sm-2 pl-4">
                             <br>
-                            <button class="btn btn-success">Add</button>
+                            <button class="btn btn-success" onclick="addSubject()">Add</button>
                         </div>
                     </div>
 
@@ -261,6 +261,32 @@
     </div>
 </main>
 
+<script>
+
+
+    function addSubject() {
+        let name = document.getElementById("book")
+        let json = {
+            'name': name
+        }
+
+        fetch('http://example.com/movies.json', {
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                method: "post",
+                body: encodeURIComponent(JSON.stringify(json.json))
+            }
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+    }
+</script>
 
 <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
