@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -151,6 +152,15 @@
                 </a>
             </li>
             <li>
+                <a href="{% url 'applicantView' %}" class="nav-link link-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-person-fill" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    Applicants
+                </a>
+            </li>
+            <li>
                 <a href="{% url 'lessonsView' %}" class="nav-link link-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-calendar" viewBox="0 0 16 16">
@@ -185,6 +195,15 @@
                     Subject
                 </a>
             </li>
+                        <li>
+                <a href="{% url 'booksCreate' %}" class="nav-link link-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-bookmark" viewBox="0 0 16 16">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                    </svg>
+                    Create book
+                </a>
+            </li>
         </ul>
         <hr>
         <div class="dropdown">
@@ -201,62 +220,12 @@
     </div>
 
     <div class="b-example-divider"></div>
-
-    <div class="container-fluid overflow-auto">
-        <div class="container my-5">
-            <div class="col-sm-12 mb-5">
-                <h4 class="pb-3">Add Book</h4>
-                <form action="">
-                    <div class="row">
-
-                        <div class="col-sm-2">
-                            <label>Name
-                                <input type="text" class="form-control" name="name" placeholder="book">
-                            </label>
-                        </div>
-                        <div class="col-sm-2 pl-4">
-                            <br>
-                            <button class="btn btn-success" type="button" onclick="addBook()">Add</button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
-
-            <div class="col-sm-12">
-                <h4>Books</h4>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col"></th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Мертвые душы</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Война и мир</td>
-
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Властелин колец</td>
-
-                    </tr>
-
-                    </tbody>
-                </table>
                 <div class="container my-5">
                     <div class="col-sm-12 mb-5">
-                        <h4 class="pb-3">Give book to student Book</h4>
-                        <form action="">
+                        <h4 class="pb-3">Give book to student</h4>
+                        <form action="" method="POST">
+                            {% csrf_token %}
+
                             <div class="row">
 
                                 <div class="col-sm-2">
@@ -283,7 +252,7 @@
                                 </div>
                                 <div class="col-sm-2 pl-4">
                                     <br>
-                                    <button class="btn btn-success">Add</button>
+                                    <input class="btn login_btn" type="submit" value="Add">
                                 </div>
                             </div>
 
@@ -304,56 +273,18 @@
                         </tr>
                         </thead>
                         <tbody>
+                        {% for debt in debts %}
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Фомичёв</td>
-                            <td>Филипп</td>
-                            <td>Война и мир</td>
-                            <td>2012-12-1</td>
+                            <th scope="row">{{debt.id}}</th>
+                            <td>{{debt.surname}}</td>
+                            <td>{{debt.name}}</td>
+                            <td>{{debt.book}}</td>
+                            <td>{{debt.book}}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm">x</button>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Меркушев</td>
-                            <td>Цицерон</td>
-                            <td>Война и мир</td>
-                            <td>2012-12-1</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm">x</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Кузнецов</td>
-                            <td>Харитон</td>
-                            <td>Война и мир</td>
-                            <td>2012-12-1</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm">x</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Козлова</td>
-                            <td>Гертруда</td>
-                            <td>Война и мир</td>
-                            <td>2012-12-1</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm">x</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Афанасьев</td>
-                            <td>Эрик</td>
-                            <td>Война и мир</td>
-                            <td>2012-12-1</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm">x</button>
-                            </td>
-                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -362,40 +293,6 @@
     </div>
 </main>
 
-
-<script>
-
-    function addBook() {
-        let name = document.getElementById("name")
-        let surname = document.getElementById("surname")
-        let subject = document.getElementById("subject")
-        let salary = document.getElementById("salary")
-
-        let json = {
-            'name': name,
-            'surname': surname,
-            'subject': subject,
-            'salary': salary
-        }
-
-        fetch('http://example.com/movies.json', {
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                },
-                method: "post",
-                body: encodeURIComponent(JSON.stringify(json.json))
-            }
-        )
-            .then(function (response) {
-                return response.json();
-            })
-
-            .catch(function (error) {
-                console.log('Request failed', error);
-            });
-    }
-</script>
 
 <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"

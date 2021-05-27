@@ -151,6 +151,15 @@
                 </a>
             </li>
             <li>
+                <a href="{% url 'applicantView' %}" class="nav-link link-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-person-fill" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    Applicants
+                </a>
+            </li>
+            <li>
                 <a href="{% url 'lessonsView' %}" class="nav-link link-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-calendar" viewBox="0 0 16 16">
@@ -185,6 +194,15 @@
                     Subject
                 </a>
             </li>
+                                  <li>
+                <a href="{% url 'booksCreate' %}" class="nav-link link-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-bookmark" viewBox="0 0 16 16">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                    </svg>
+                    Create book
+                </a>
+            </li>
 
         </ul>
         <hr>
@@ -208,7 +226,9 @@
         <div class="container my-5">
             <div class="col-sm-12 mb-5">
                 <h4 class="pb-3">Add Subject</h4>
-                <form action="">
+                <form action="" method="POST">
+                    {% csrf_token %}
+
                     <div class="row">
 
                         <div class="col-sm-2">
@@ -218,7 +238,7 @@
                         </div>
                         <div class="col-sm-2 pl-4">
                             <br>
-                            <button class="btn btn-success" onclick="addSubject()">Add</button>
+                            <input class="btn login_btn" type="submit" value="Add">
                         </div>
                     </div>
 
@@ -232,26 +252,19 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">id</th>
                             <th scope="col">Name</th>
 
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Math</td>
+                            {% for subject in subjects %}
+                            <th scope="row">{{subject.id}}</th>
+                            <td>{{subject.name}}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Chemistry</td>
+                        {% endfor %}
 
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Physics</td>
-
-                        </tr>
 
                         </tbody>
                     </table>

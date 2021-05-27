@@ -13,15 +13,12 @@
 <nav class="py-2 bg-light border-bottom">
     <div class="container d-flex flex-wrap">
         <ul class="nav me-auto">
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2 active" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Teachers</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Students</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Lessons</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Sections</a></li>
+            <li class="nav-item"><a href="{% url 'student_menu' %}" class="nav-link link-dark px-2 active" aria-current="page">Home</a></li>
+                        <li class="nav-item"><a href="{% url 'student_profile' %}" class="nav-link link-dark px-2 active" aria-current="page">Profile</a></li>
+
         </ul>
         <ul class="nav">
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Login</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Sign up</a></li>
+            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link link-dark px-2">Выйти</a></li>
         </ul>
     </div>
 </nav>
@@ -44,34 +41,6 @@
             <div class="card-body">
                 <div class="col-sm-3">
                     <p>Фомичёв Филипп</p>
-                </div>
-                <hr>
-                <div class="col-sm-3">
-                    <p>Меркушев Цицерон</p>
-                </div>
-                <hr>
-                <div class="col-sm-3">
-                    <p>Кузнецов Харитон</p>
-                </div>
-                <hr>
-                <div class="col-sm-3">
-                    <p>Козлова Гертруда</p>
-                </div>
-                <hr>
-                <div class="col-sm-3">
-                    <p>Афанасьев Эрик</p>
-                </div>
-                <hr>
-                <div class="col-sm-3">
-                    <p>Чернова Злата</p>
-                </div>
-                <hr>
-                <div class="col-sm-3">
-                    <p>Воронцова Элина</p>
-                </div>
-                <hr>
-                <div class="col-sm-3">
-                    <p>Бачей Жерар</p>
                 </div>
                 <hr>
             </div>

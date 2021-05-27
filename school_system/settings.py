@@ -71,6 +71,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'school_system.wsgi.application'
 
+STATIC_URL = '/static/'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -84,7 +86,7 @@ WSGI_APPLICATION = 'school_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'NewDataBase',
+        'NAME': 'school',
         'USER': 'SA',
         'PASSWORD': 'Postgres123',
         'HOST': 'localhost',

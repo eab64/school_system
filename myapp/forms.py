@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'last_name']
 
 
 class TeacherForm(forms.Form):

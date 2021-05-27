@@ -13,11 +13,8 @@
 <nav class="py-2 bg-light border-bottom">
     <div class="container d-flex flex-wrap">
         <ul class="nav me-auto">
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2 active" aria-current="page">Главная</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Преподователи</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Студенты</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Курсы</a></li>
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Секции</a></li>
+            <li class="nav-item"><a href="{% url 'student_menu' %}" class="nav-link link-dark px-2 active" aria-current="page">Home</a></li>
+
         </ul>
         <ul class="nav">
             <li class="nav-item"><a href="#" class="nav-link link-dark px-2"><strong>Сыпченко Лука</strong></a></li>
@@ -46,7 +43,8 @@
                         <div class="d-flex flex-column align-items-center text-center">
                             <div class="mt-3">
                                 <h4>Сыпченко Лука</h4>
-                                <p class="text-secondary mb-1">Студент</p>
+                                <p class="text-muted font-size-sm">Спортсмен</p>
+                                <p class="text-muted font-size-sm">Спортсмен</p>
                                 <p class="text-muted font-size-sm">Спортсмен</p>
                                 <button class="btn btn-primary">Оплатить</button>
                             </div>

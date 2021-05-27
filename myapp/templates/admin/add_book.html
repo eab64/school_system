@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -6,8 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.83.1">
-    <title>
-        School Management System</title>
+    <title>School Management System</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
 
@@ -30,7 +30,6 @@
 
 
     <style>
-
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -49,9 +48,8 @@
 
     <!-- Custom styles for this template -->
     <link href="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.css" rel="stylesheet">
-
 </head>
-<body>
+<body data-new-gr-c-s-check-loaded="14.1012.0" data-gr-ext-installed="">
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="bootstrap" viewBox="0 0 118 94">
@@ -134,7 +132,7 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="{% url 'teacher_menu' %}" class="nav-link line-dark active">
+                <a href="{% url 'teacher_menu' %}" class="nav-link line-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-building" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -197,8 +195,8 @@
                     Subject
                 </a>
             </li>
-                                  <li>
-                <a href="{% url 'booksCreate' %}" class="nav-link link-dark">
+                        <li>
+                <a href="{% url 'booksCreate' %}" class="nav-link link-dark active">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-bookmark" viewBox="0 0 16 16">
                         <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
@@ -206,6 +204,7 @@
                     Create book
                 </a>
             </li>
+
         </ul>
         <hr>
         <div class="dropdown">
@@ -224,9 +223,9 @@
     <div class="b-example-divider"></div>
 
     <div class="container-fluid overflow-auto">
-        <div class="container my-5 ">
+        <div class="container my-5">
             <div class="col-sm-12 mb-5">
-                <h4 class="pb-3">Add Teacher</h4>
+                <h4 class="pb-3">Add Book</h4>
                 <form action="" method="POST">
                     {% csrf_token %}
 
@@ -234,54 +233,7 @@
 
                         <div class="col-sm-2">
                             <label>Name
-                                <input type="text" class="form-control" name="name" placeholder="name">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Surname
-                                <input type="text" class="form-control" name="surname" placeholder="surname">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Subject
-                                <input type="text" class="form-control" name="subject" placeholder="subject">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Salary
-                                <input type="text" class="form-control" name="salary" placeholder="salary">
-                            </label>
-                        </div>
-                        <div class="col-sm-2 pl-4">
-                            <br>
-                            <input class="btn login_btn" type="submit" value="Add">
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-            <hr>
-
-            <div class="col-sm-12 mb-5">
-                <h4 class="pb-3">Insert Teacher qualification</h4>
-                <form action="" method="POST">
-                    {% csrf_token %}
-
-                    <div class="row">
-
-                        <div class="col-sm-2">
-                            <label>Name
-                                <input type="text" class="form-control" name="name" placeholder="name">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Surname
-                                <input type="text" class="form-control" name="surname" placeholder="surname">
-                            </label>
-                        </div>
-                        <div class="col-sm-2">
-                            <label>Success status
-                                <input type="text" class="form-control" name="salary" placeholder="salary">
+                                <input type="text" class="form-control" name="one_book" placeholder="add_book">
                             </label>
                         </div>
                         <div class="col-sm-2 pl-4">
@@ -293,54 +245,41 @@
                 </form>
             </div>
 
-            <div class="row">
 
-                <div class="col-sm-12">
-                    <h4>Teachers</h4>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Surname</th>
-                            <th scope="col">Subject</th>
-                            <th scope="col">Salary</th>
-                            <th scope="col">Enrolment Date</th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            {% for teacher in teachers %}
-                            <th scope="row">{{teacher.id}}</th>
-                            <td>{{teacher.name}}</td>
-                            <td>{{teacher.surname}}</td>
-                            <td>{{teacher.subject}}</td>
-                            <td>{{teacher.salary}}</td>
-                            <td>
-                                {{teacher.enrollment_date}}
-                            </td>
-                            <td>
-                                <button class="btn btn-danger btn-sm">x</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
+            <div class="col-sm-12">
+                <h4>Books</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col"></th>
 
-                        </tbody>
-                    </table>
-                    </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <th scope="row">{{book.id}}</th>
+                        <td>{{book.name}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+
                 </div>
             </div>
         </div>
     </div>
 </main>
 
-
 <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
 
 <script src="https://getbootstrap.com/docs/5.0/examples/sidebars/sidebars.js"></script>
+
 
 </body>
 </html>
