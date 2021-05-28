@@ -6,6 +6,8 @@ urlpatterns = [
     path('login/', views.loginPage, name='login'),
     path('student_menu/', views.studentMenu, name='student_menu'),
     path('student_profile/', views.studentProfile, name='student_profile'),
+    path('lessons_list/', views.lessonsList, name='lessons_list'),
+    path('sections_list/', views.sectionsList, name='sections_list'),
 
     path('adminka/', views.teacherMenu, name='teacher_menu'),
     path('applicant_view/', views.NotQualStudentsView, name = 'applicantView'),
@@ -16,6 +18,7 @@ urlpatterns = [
     path('books_view/', views.booksView, name = 'booksView'),
     path('books_create/', views.bookCreate, name='booksCreate'),
     path('subject_view/', views.subjectView, name='subjectView'),
+    path('add_class/', views.addToClass, name = 'addToClass')
 
     # path('teacher_main/', views.adminView, name='teacher_main')
 #     path('second_login/', views.secondLogin, name = 'second_login'),
@@ -29,7 +32,7 @@ urlpatterns = [
     # path('book_create/', views.bookCreate),
     # path('subject_creat/', views.subjectCreate),
 
-    path('take_info/', views.take_info)
+    # path('take_info/', views.take_info)
 
 
 ]

@@ -194,7 +194,7 @@
                     Subject
                 </a>
             </li>
-                                  <li>
+            <li>
                 <a href="{% url 'booksCreate' %}" class="nav-link link-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-bookmark" viewBox="0 0 16 16">
@@ -252,19 +252,15 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">id</th>
                             <th scope="col">Name</th>
-
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             {% for subject in subjects %}
-                            <th scope="row">{{subject.id}}</th>
                             <td>{{subject.name}}</td>
+                            {% endfor %}
                         </tr>
-                        {% endfor %}
-
 
                         </tbody>
                     </table>

@@ -35,7 +35,8 @@ def registerPage(request):
             form.save()
             name = form.cleaned_data.get('username')
             surname = form.cleaned_data.get('last_name')
-            cursor.execute("INSERT INTO implicant (name,surname) VALUES (?,?)", name, surname)
+            email = form.cleaned_data.get('email')
+            cursor.execute("INSERT INTO implicant (name,surname,email) VALUES (?,?,?)", name, surname, email)
             conn.commit()
 
             messages.success(request, 'Регистрация прошла успешна')
@@ -52,18 +53,26 @@ def loginPage(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         user = authenticate(request, username=username, password=password)
         if user.username == 'admin':
             login(request, user)
             return redirect('teacher_menu')
         elif user is not None:
             login(request, user)
-
+            print(username)
             student = cursor.execute('SELECT * FROM student WHERE name=?', username)
-            context = {'student': student}
+            rows = student.fetchall()
+            print(rows)
+            columns = [column[0] for column in student.description]
+            print(columns)
+            result = []
+            for row in rows:
+                result.append(dict(zip(columns, row)))
+            context = {'students': result}
             return render(request, 'users/profile.html', context)
-            # return redirect('student_menu')
+        return render(request, 'users/profile.html')
+
+        # return redirect('student_menu')
     context = {}
     return render(request, 'myapp/login.html', context)
 
@@ -76,38 +85,70 @@ def studentProfile(request):
     return render(request, 'users/profile.html')
 
 
+"""Нужен фильтр по студенту"""
+
+
+def lessonsList(request):
+    lessons = cursor.execute('exec SelectLesson')
+    columns2 = [column[0] for column in lessons.description]
+
+    result2 = []
+    for row in lessons.fetchall():
+        result2.append(dict(zip(columns2, row)))
+    context = {'lessons': result2}
+    print(result2)
+    return render(request, 'users/lessons_list.html', context=context)
+
+
+def sectionsList(request):
+    lessons = cursor.execute('exec SelectLesson')
+    columns2 = [column[0] for column in lessons.description]
+
+    result2 = []
+    for row in lessons.fetchall():
+        result2.append(dict(zip(columns2, row)))
+    context = {'lessons': result2}
+    print(result2)
+
+    return render(request, 'users/sections_list.html', context=context)
+
+
 # ----------------------------------------------------------------------ADMINS TEMA
 def teacherMenu(request):
     teachers = cursor.execute('exec SelectAllTeachers')
-
+    rows = teachers.fetchall()
     columns2 = [column[0] for column in teachers.description]
-
     result2 = []
-    for row in teachers.fetchall():
+    for row in rows:
         result2.append(dict(zip(columns2, row)))
     context = {'teachers': result2}
-
+    # ----------------------------------------------------------------------------------------------
     if request.method == "POST":
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         subject = request.POST.get('subject')
         salary = request.POST.get('salary')
+        sql_teacher = ("""{ CALL CreateTeacher (@name=?, @surname=?, @subject=?, @salary=?) }""")
+        params_teacher = (name, surname, salary, subject)
+        cursor.execute(sql_teacher, params_teacher)
+        cursor.commit()
 
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         success = request.POST.get('success')
-        date = request.POST.get('date')
+        sql_qual = ("""{ CALL CreateQualification (@succes=?, @name=?, @surname=?) }""")
+        params_qual = (success, first_name, last_name)
+        cursor.execute(sql_qual, params_qual)
+        cursor.commit()
+
+        return redirect('/adminka/')
+        # date = request.POST.get('date')
         # date = date.replace('T',' ')
 
         # date_with = datetime.strptime(date, '%Y-%m-%d %H:%M').strftime('%d/%m/%Y %H:%M')
         # print(date_with)
-        sql_qual = ("""{ CALL CreateQualification (@date=?, @succes=?, @name=?, @surname=?) }""")
-        # sql_teacher = ("""{ CALL CreateTeacher (@name=?, @surname=?, @subject=?, @salary=?) }""")
-        params_teacher = (name, surname, salary, subject)
-        params_qual = (date, success, first_name, last_name)
-        cursor.execute(sql_qual, params_qual)
-        # cursor.execute(sql_teacher, params_teacher)
-        cursor.commit()
+        # sql_qual = ("""{ CALL CreateQualification (@date=?, @succes=?, @name=?, @surname=?) }""")
+
     return render(request, 'admin/teacher_menu.html', context=context)
 
 
@@ -119,6 +160,17 @@ def studentsView(request):
     for row in student.fetchall():
         result.append(dict(zip(columns, row)))
     context = {'students': result}
+
+    if request.method == "POST":
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        classs = request.POST.get('class')
+
+        sql_teacher = ("""{ CALL InsertStudentPayment (@name=?, @surname=?, @class=?) }""")
+        params_teacher = (name, surname, classs)
+        cursor.execute(sql_teacher, params_teacher)
+        cursor.commit()
+        return redirect('/students_view/')
 
     return render(request, 'admin/students.html', context=context)
 
@@ -137,11 +189,11 @@ def NotQualStudentsView(request):
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         score = request.POST.get('score')
-        cursor.execute('UPDATE implicant SET score = ? where name = ? AND surname = ?', score, name, surname)
+        family = request.POST.get('family_status')
+        cursor.execute('UPDATE implicant SET score = ?,  large_family_mamber = ? where name = ? AND surname = ?', score,
+                       family, name, surname)
         cursor.commit()
-        print(name)
-        print(surname)
-        print(score)
+        return redirect('/applicant_view/')
 
     return render(request, 'admin/applicants.html', context)
 
@@ -172,6 +224,7 @@ def lessonsView(request):
         params = (name, date_with, room, subject)
         cursor.execute(sql, params)
         cursor.commit()
+        return redirect('/lessons_view/')
 
     return render(request, 'admin/lessons.html', context)
 
@@ -195,12 +248,16 @@ def sectionsView(request):
         name = request.POST.get('name')
         subject = request.POST.get('subject')
         date = request.POST.get('date')
+        date = date.replace('T', ' ')
+        date_with = datetime.strptime(date, '%Y-%m-%d %H:%M').strftime('%d/%m/%Y %H:%M')
+
         room = request.POST.get('room')
 
-        print(name)
-        print(subject)
-        print(date)
-        print(room)
+        sql = ("""{ CALL CreateSection (@class=?, @startDate=?, @room=?, @subject=?) }""")
+        params = (name, date_with, room, subject)
+        cursor.execute(sql, params)
+        cursor.commit()
+        return redirect('/sections_view/')
 
     return render(request, 'admin/sections.html', context)
 
@@ -213,21 +270,31 @@ def sectionsView(request):
 
 def booksView(request):
     debt_students = cursor.execute('exec GetStudentsWithBooks')
+    rows = debt_students.fetchall()
+    print(rows)
     columns2 = [column[0] for column in debt_students.description]
+    print(columns2)
     result2 = []
-    for row in debt_students.fetchall():
+    for row in rows:
         result2.append(dict(zip(columns2, row)))
+    print(result2)
 
     if request.method == "POST":
         name = request.POST.get('name')
-        subject = request.POST.get('surname')
-        date = request.POST.get('class')
-        room = request.POST.get('book')
-        cursor.commit()
+        surname = request.POST.get('surname')
+        classs = request.POST.get('class')
+        book = request.POST.get('book')
         print(name)
-        print(subject)
-        print(date)
-        print(room)
+        print(surname)
+        print(classs)
+        print(book)
+
+        sql = ("""{ CALL TakeBook (@name=?, @surname=?, @class=?, @book=?) }""")
+        params = (name, surname, classs, book)
+        cursor.execute(sql, params)
+        cursor.commit()
+        return redirect('/books_view/')
+
     context = {'debts': result2}
     return render(request, 'admin/books.html', context=context)
 
@@ -244,6 +311,7 @@ def bookCreate(request):
         adds = request.POST.get('one_book')
         cursor.execute("INSERT INTO book (name) VALUES (?)", adds)
         cursor.commit()
+        return redirect('/books_create/')
         print(adds)
 
     return render(request, 'admin/add_book.html', context=context)
@@ -262,184 +330,34 @@ def subjectView(request):
         cursor.execute('{call CreateSubject (?)}', name)
         print(name)
         cursor.commit()
+        return redirect('/subject_view/')
         messages.add_message(request, messages.INFO, 'Success')
 
     return render(request, 'admin/subject.html', context=context)
 
 
-#
-# def test_sql(request):
-#     name = 'Yeldos'
-#     # cursor.execute("SELECT * FROM test_table")
-#     # for row in cursor:
-#     #     print(row)
-#     cursor.execute ("insert into test_table (name) values (?)",name)
-#     cursor.commit()
-#     # context = {'result':result}
-#     return render(request, 'myapp/sql.html')
+def addToClass(request):
+    if request.method == "POST":
+        name_to_add = request.POST.get('first_name')
 
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        classs = request.POST.get('class')
+        print(name)
+        print(surname)
+        print(classs)
+        sql = ("""{ CALL InsertStudentIntoClass (@name=?, @surname=?, @class=?) }""")
+        params = (name, surname, classs)
+        cursor.execute(sql, params)
+        cursor.commit()
+        return redirect('/add_class/')
 
-def test_sql(request):
-    cursor.execute("SELECT * FROM teacher")
-    for row in cursor:
-        print(row)
-    return render(request, 'myapp/sql.html')
+        messages.add_message(request, messages.INFO, 'Success')
 
+    return render(request, 'admin/classes.html')
 
 # ----------------------------------------------------------------------------------------------
 """ЗДЕСЬ НАЧИНАЮТСЯ ВСЕ ФОРМЫ КОТОРЫЕ ПОСЛЕ ПРОСТО ПЕРЕНОСИМ В view и кусок его html добавляем в MAIN
 ПРОСТО БЕРЕШЬ СОЗДАЕШЬ ПЕРЕМЕННЫЕ с полученных ДАННЫХ и с ними делаешь ЗАПРОС и все
 ТУТ ПО СУТИ ОДНИ inserts поэтому процедура примет данные и сама INSERT в первом примере уже есть готовый шаблон
 Если INSERT то его"""
-
-
-def get_name(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        form = TeacherForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get('name')
-            surname = form.cleaned_data.get('surname')
-            subject = form.cleaned_data.get('subject')
-            salary = form.cleaned_data.get('salary')
-            sql = ("""{ CALL CreateTeacher (@name=?, @surname=?, @subject=?, @salary=?) }""")
-            params = (name, surname, salary, subject)
-            cursor.execute(sql, params)
-            cursor.commit()
-            return HttpResponseRedirect('/test_form')
-
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = TeacherForm()
-
-    return render(request, 'myapp/test_html.html', {'form': form})
-
-
-def studentCreate(request):  # Zakon4it nado
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get('name')
-            surname = form.cleaned_data.get('surname')
-            score = form.cleaned_data.get('score')
-            cursor.execute("UPDATE implicant SET score=%s WHERE name='yeldos3' AND surname='bolatov'", [score])
-            cursor.commit()
-            return HttpResponseRedirect('/student_create')
-
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = StudentForm()
-
-    return render(request, 'myapp/student_test.html', {'form': form})
-
-
-# def lessonCreate(request):
-#     if request.method == 'POST':
-#         form = LessonForm(request.POST)
-#         if form.is_valid():
-#             klass = form.cleaned_data.get('klass')
-#             subject = form.cleaned_data.get('subject')
-#             date = form.cleaned_data.get('date')
-#             room = form.cleaned_data.get('room')
-#             sql = ("""{ CALL CreateLesson (@class=?, @startDate=?, @room=?, @subject=?) }""")
-#             params = (klass, date, room, subject)
-#             cursor.execute(sql, params)
-#             cursor.commit()
-#
-#             return HttpResponseRedirect('/lesson_create')
-#
-#
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = LessonForm()
-#
-#     return render(request, 'myapp/Lesson_test.html', {'form': form})
-
-
-def sectionCreate(request):
-    if request.method == 'POST':
-        form = SectionsForm(request.POST)
-        if form.is_valid():
-            classs = form.cleaned_data.get('klass')
-            subject = form.cleaned_data.get('subject')
-            date = form.cleaned_data.get('date')
-            room = form.cleaned_data.get('room')
-            # sql = ("""{ CALL CreateLesson (@class=?, @startDate=?, @room=?, @subject=?) }""")
-            # params = (klass, date, room, subject)
-            # cursor.execute(sql, params)
-            # cursor.commit()
-
-            # cursor.execute("UPDATE implicant SET score=%s WHERE name='yeldos3' AND surname='bolatov'", [score])
-            # cursor.commit()
-            return HttpResponseRedirect('/section_create')
-
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = SectionsForm()
-
-    return render(request, 'myapp/section_test.html', {'form': form})
-
-
-# def bookCreate(request):
-#     if request.method == 'POST':
-#         form = BookForm(request.POST)
-#         if form.is_valid():
-#             name = form.cleaned_data.get('klass')
-#
-#             # sql = ("""{ CALL CreateLesson (@class=?, @startDate=?, @room=?, @subject=?) }""")
-#             # params = (klass, date, room, subject)
-#             # cursor.execute(sql, params)
-#             # cursor.commit()
-#
-#             # cursor.execute("UPDATE implicant SET score=%s WHERE name='yeldos3' AND surname='bolatov'", [score])
-#             # cursor.commit()
-#             return HttpResponseRedirect('/book_create')
-#
-#
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = BookForm()
-#
-#     return render(request, 'myapp/book_test.html', {'form': form})
-
-
-def subjectCreate(request):
-    if request.method == 'POST':
-        form = SubjectForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get('klass')
-
-            # sql = ("""{ CALL CreateLesson (@class=?, @startDate=?, @room=?, @subject=?) }""")
-            # params = (klass, date, room, subject)
-            # cursor.execute(sql, params)
-            # cursor.commit()
-
-            # cursor.execute("UPDATE implicant SET score=%s WHERE name='yeldos3' AND surname='bolatov'", [score])
-            # cursor.commit()
-            return HttpResponseRedirect('/subject_create')
-
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = SubjectForm()
-
-    return render(request, 'myapp/subject_test.html', {'form': form})
-
-
-def take_info(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'POST':
-        print('post')
-        data = request.data()
-        return Response(data)
-
-
-def student_profile(request):
-    """ОТДАТЬ ИНФУ ПРО СТУДЕНТА ЧИСТО СЕЛЕКТЫ"""
-    pass

@@ -193,7 +193,7 @@
                     Subject
                 </a>
             </li>
-                                  <li>
+            <li>
                 <a href="{% url 'booksCreate' %}" class="nav-link link-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-bookmark" viewBox="0 0 16 16">
@@ -224,7 +224,34 @@
 
 
             <div class="row">
+                <h4>Сделать оплату</h4>
+                <form action="" method="POST">
+                    {% csrf_token %}
 
+                    <div class="row">
+
+                        <div class="col-sm-2">
+                            <label>Name
+                                <input type="text" class="form-control" name="name" placeholder="name">
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Surname
+                                <input type="text" class="form-control" name="surname" placeholder="surname">
+                            </label>
+                        </div>
+                           <div class="col-sm-2">
+                            <label>Surname
+                                <input type="text" class="form-control" name="class" placeholder="class">
+                            </label>
+                        </div>
+                        <div class="col-sm-2 pl-4">
+                            <br>
+                            <input class="btn login_btn" type="submit" value="Submit">
+                        </div>
+                    </div>
+
+                </form>
                 <div class="col-sm-12">
                     <h4 class="mt-5">Students</h4>
 

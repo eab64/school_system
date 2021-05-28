@@ -247,7 +247,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Book
-                                        <input type="text" class="form-control" name="name" placeholder="book">
+                                        <input type="text" class="form-control" name="book" placeholder="book">
                                     </label>
                                 </div>
                                 <div class="col-sm-2 pl-4">
@@ -264,10 +264,9 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">Book name</th>
+                            <th scope="col">Student name</th>
                             <th scope="col">Surname</th>
-                            <th scope="col">Book</th>
                             <th scope="col">Date</th>
                             <th scope="col"></th>
                         </tr>
@@ -275,11 +274,11 @@
                         <tbody>
                         {% for debt in debts %}
                         <tr>
-                            <th scope="row">{{debt.id}}</th>
+                            <th scope="row">{{debt.book_name}}</th>
+                            <td>{{debt.student_name}}</td>
                             <td>{{debt.surname}}</td>
-                            <td>{{debt.name}}</td>
-                            <td>{{debt.book}}</td>
-                            <td>{{debt.book}}</td>
+                            <td>{{debt.date}}</td>
+
                             <td>
                                 <button class="btn btn-danger btn-sm">x</button>
                             </td>
